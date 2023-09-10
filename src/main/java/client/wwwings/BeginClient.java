@@ -1,9 +1,10 @@
 package client.wwwings;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import client.wwwings.packets.ChatMessageB2IPacket;
+import client.wwwings.packets.ChatMessageI2BPacket;
+import client.wwwings.packets.Packet;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -38,16 +39,20 @@ public class BeginClient {
                 // Handle client communication here
                 // You can create input and output streams to send/receive data
                 // Example:
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                String line = null;
-                while ((line = in.readLine()) != null) {
-                    if (line.startsWith("chat{")) {
-                        String msg = line.replace("chat{", "").replace("}");
-
+                try (ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream())) {
+                    // Receive packets from the client
+                    Packet receivedPacket;
+                    while ((receivedPacket = (Packet) ois.readObject()) != null) {
+                        if (receivedPacket instanceof ChatMessageI2BPacket packet) {
+                            System.out.println(packet.data()[0]);
+                        }
                     }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                } finally {
+                    // Close the client socket (you may want to handle this more gracefully)
+                    clientSocket.close();
                 }
-                server.close();
                 // Close the client socket when done
             }catch (Exception e) {
                 System.out.println("Failure to begin or run server. Closed.");
