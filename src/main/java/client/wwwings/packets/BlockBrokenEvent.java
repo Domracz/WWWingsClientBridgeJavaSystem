@@ -1,11 +1,11 @@
 package client.wwwings.packets;
 
-public class BlockPlacedEvent extends Packet{
+public class BlockBrokenEvent extends Packet{
     Object[] data;
     String id;
-    public BlockPlacedEvent(int x, int y, int z, String blockid) {
+    public BlockBrokenEvent(int x, int y, int z, String blockid) {
         data = new Object[]{x, y, z, blockid};
-        id = "BlockPlacedEvent";
+        id = "BlockBroken";
     }
 
     @Override
@@ -15,6 +15,8 @@ public class BlockPlacedEvent extends Packet{
 
     @Override
     public String id() {
-        return "BlockPlacedEvent";
+        return "BlockBrokenEvent";
     }
+
+
 }

@@ -5,17 +5,20 @@ import client.wwwings.packets.Packet;
 
 public class POSTPlayers extends Packet {
     Object[] data;
+    String id;
 
-    public POSTPlayers(String uuid, String name, int x, int y, int z) {
-        data = new Object[]{new Player(uuid, name, x, y, z)};
+    public POSTPlayers(Player[] players) {
+        data = players;
+        id = "POSTPlayers";
     }
 
-    @Override
-    public String getId() {
-        return "POSTPlayers";
-    }
     @Override
     public Object[] data() {
         return data;
+    }
+
+    @Override
+    public String id() {
+        return "POSTPlayers";
     }
 }
